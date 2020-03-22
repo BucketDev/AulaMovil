@@ -1,0 +1,8 @@
+{
+  "appId": "io.ionic.starter",
+  "appName": "AulaMovil2",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "cordova": {}
+}
