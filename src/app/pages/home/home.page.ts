@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {AngularFireFunctions} from '@angular/fire/functions';
+import {AuthService} from '../../services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -10,7 +11,8 @@ export class HomePage {
 
   message: string;
 
-  constructor(private fireFunctions: AngularFireFunctions) {}
+  constructor(private fireFunctions: AngularFireFunctions,
+              private authService: AuthService) {}
 
   callFunction = () => {
     const callable = this.fireFunctions.functions.httpsCallable('helloWorld');
@@ -18,5 +20,7 @@ export class HomePage {
       this.message = data.data;
     });
   }
+
+  signOut = () => this.authService.signOut();
 
 }

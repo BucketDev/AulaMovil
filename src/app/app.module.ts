@@ -11,6 +11,10 @@ import { AppRoutingModule } from './app-routing.module';
 import {AngularFireModule} from '@angular/fire';
 import {environment} from '../environments/environment';
 import {AngularFireFunctionsModule} from '@angular/fire/functions';
+import {AngularFireAuthModule} from '@angular/fire/auth';
+import {AngularFirestoreModule} from '@angular/fire/firestore';
+import {AngularFireStorageModule} from '@angular/fire/storage';
+import {AboutModule} from './components/about/about.module';
 
 @NgModule({
   imports: [
@@ -18,7 +22,11 @@ import {AngularFireFunctionsModule} from '@angular/fire/functions';
     IonicModule.forRoot(),
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebaseConfig, 'aula-movil'),
-    AngularFireFunctionsModule
+    AngularFireAuthModule,
+    AngularFirestoreModule,
+    AngularFireStorageModule,
+    AngularFireFunctionsModule,
+    AboutModule
   ],
   providers: [
     StatusBar,

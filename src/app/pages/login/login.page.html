@@ -1,0 +1,10 @@
+<ion-header>
+  <ion-toolbar color="aula-movil">
+    <ion-title>Aula Movil</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <ion-progress-bar type="indeterminate" color="aula-movil" *ngIf="loading"></ion-progress-bar>
+  <router-outlet></router-outlet>
+  <ion-button expand="block" color="danger" (click)="googleSignIn()">Iniciar con Google</ion-button>
+</ion-content>
