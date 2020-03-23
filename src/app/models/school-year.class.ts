@@ -1,11 +1,10 @@
 import * as moment from 'moment';
-import * as firebase from 'firebase';
-import Timestamp = firebase.firestore.Timestamp;
+import {firestore} from 'firebase/app';
 
 export class SchoolYear {
   uid?: string;
   name: string;
-  creationDate: Date | Timestamp;
+  creationDate: Date | firestore.Timestamp;
 
   constructor(start: Date) {
     const startYear = moment(start).format('YYYY');

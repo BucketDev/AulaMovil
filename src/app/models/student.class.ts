@@ -1,5 +1,4 @@
-import * as firebase from 'firebase';
-import Timestamp = firebase.firestore.Timestamp;
+import {firestore} from 'firebase/app';
 
 export class Student {
   uid?: string;
@@ -8,7 +7,7 @@ export class Student {
   lastName: string;
   displayLastName: string;
   listNumber?: number;
-  creationDate: Date | Timestamp;
+  creationDate: Date | firestore.Timestamp;
 
   constructor(name: string, lastName: string) {
     this.displayName = name.trim().toLowerCase().split(' ')

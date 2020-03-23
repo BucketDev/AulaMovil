@@ -1,5 +1,4 @@
-import * as firebase from 'firebase';
-import Timestamp = firebase.firestore.Timestamp;
+import {firestore} from 'firebase/app';
 
 export class Group {
   uid?: string;
@@ -8,7 +7,7 @@ export class Group {
   students: number;
   activities: number;
   schoolYear: string;
-  creationDate: Date | Timestamp;
+  creationDate: Date | firestore.Timestamp;
 
   constructor(name: string, schoolYear: string) {
     this.name = name.toUpperCase();

@@ -15,6 +15,7 @@ import {AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {AngularFireStorageModule} from '@angular/fire/storage';
 import {AboutModule} from './components/about/about.module';
+import {DeactivateGuard} from './guards/deactivate.guard';
 
 @NgModule({
   imports: [
@@ -31,6 +32,7 @@ import {AboutModule} from './components/about/about.module';
   providers: [
     StatusBar,
     SplashScreen,
+    DeactivateGuard,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   declarations: [AppComponent],

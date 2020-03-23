@@ -1,13 +1,12 @@
 import {Student} from './student.class';
 import * as moment from 'moment';
-import * as firebase from 'firebase';
-import Timestamp = firebase.firestore.Timestamp;
+import {firestore} from 'firebase/app';
 
 export class Assistance {
   uid?: string;
   students: Student[];
-  date: Date | Timestamp;
-  creationDate: Date | Timestamp;
+  date: Date | firestore.Timestamp;
+  creationDate: Date | firestore.Timestamp;
 
   constructor(date: Date) {
     this.uid = moment(date).format('YYYYMMDD');

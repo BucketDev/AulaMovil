@@ -1,11 +1,10 @@
-import * as firebase from 'firebase';
-import Timestamp = firebase.firestore.Timestamp;
+import {firestore} from 'firebase/app';
 
 export class Grade {
   uid?: string;
   studentUid: string;
   score: number;
-  creationDate: Date | Timestamp;
+  creationDate: Date | firestore.Timestamp;
 
   constructor(studentUid: string, score: number) {
     this.studentUid = studentUid;

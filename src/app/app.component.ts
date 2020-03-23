@@ -4,6 +4,8 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import {AuthService} from './services/auth.service';
+import {FileSharer} from '@byteowls/capacitor-filesharer';
+import {registerWebPlugin} from '@capacitor/core';
 
 @Component({
   selector: 'app-root',
@@ -24,6 +26,7 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
+      registerWebPlugin(FileSharer);
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
