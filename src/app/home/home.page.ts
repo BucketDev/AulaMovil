@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {AngularFireFunctions} from '@angular/fire/functions';
 
 @Component({
   selector: 'app-home',
@@ -7,6 +8,15 @@ import { Component } from '@angular/core';
 })
 export class HomePage {
 
-  constructor() {}
+  message: string;
+
+  constructor(private fireFunctions: AngularFireFunctions) {}
+
+  callFunction = () => {
+    const callable = this.fireFunctions.functions.httpsCallable('helloWorld');
+    callable({name: 'Rodrigo Loyola'}).then((data) => {
+      this.message = data.data;
+    });
+  }
 
 }
