@@ -1,6 +1,6 @@
 {
   "appId": "com.bucketdev.aulamovil",
-  "appName": "AulaMovil2",
+  "appName": "AulaMovil",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
