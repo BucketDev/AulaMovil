@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">AulaMovil2</string>
-    <string name="title_activity_main">AulaMovil2</string>
+    <string name="app_name">AulaMovil</string>
+    <string name="title_activity_main">AulaMovil</string>
     <string name="package_name">com.bucketdev.aulamovil</string>
     <string name="custom_url_scheme">com.bucketdev.aulamovil</string>
 </resources>

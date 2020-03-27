@@ -66,8 +66,10 @@ export class HomePage implements DeactivatableComponent {
         if (activeSubscription === null) {
           this.stripeService.findSubscriptions().toPromise().then(this.obtainedSubscriptions);
         } else {
-          if (moment().format(formatCheckedSubscription) !== activeSubscription.checked) {
+          if (moment().format(formatCheckedSubscription) === activeSubscription.checked) {
             this.obtainedSubscriptions(activeSubscription.subscriptions);
+          } else {
+            this.stripeService.findSubscriptions().toPromise().then(this.obtainedSubscriptions);
           }
         }
     });
