@@ -82,6 +82,7 @@ export class AuthService {
 
   signOut = async () => {
     await this.storageService.remove('schoolYear');
+    await this.storageService.remove('activeSubscriptionCheck');
     await this.afAuth.auth.signOut();
   }
 

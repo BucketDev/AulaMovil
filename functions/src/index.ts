@@ -136,6 +136,40 @@ exports.copyDataFromUserToUser = functions.https.onRequest((req, resp) => {
   resp.status(200).send();
 });
 
+exports.copyDataFromGroupToGroup = functions.https.onRequest((req, resp) => {
+  const {from, fromGroup, to, toGroup} = req.body;
+  if (from !== undefined && to !== undefined && fromGroup !== undefined && toGroup !== undefined) {
+    console.log(`Copying from user: ${from} group: ${fromGroup} to user: ${to} group ${toGroup}`);
+    const fromRef = admin.firestore().doc(`users/${from}`).collection('groups').doc(fromGroup);
+    const toRef = admin.firestore().doc(`users/${to}`).collection('groups').doc(toGroup);
+    return fromRef.get().then(snapshot => {
+      const groupData = snapshot.data();
+      if (groupData !== undefined) {
+        toRef.set(groupData).then(() => {
+          fromRef.collection('students').get().then(snapshotStudents => {
+            snapshotStudents.docs.forEach(async student => {
+              await toRef.collection('students').doc(student.id).set(student.data());
+            });
+          }).catch(console.error);
+          fromRef.collection('activities').get().then(snapshotActivities => {
+            snapshotActivities.docs.forEach(async activity => {
+              await toRef.collection('activities').doc(activity.id).set(activity.data());
+            });
+          }).catch(console.error);
+          fromRef.collection('assistance').get().then(snapshotAssistance => {
+            snapshotAssistance.docs.forEach(async assistance => {
+              await toRef.collection('assistance').doc(assistance.id).set(assistance.data());
+            });
+          }).catch(console.error);
+        }).catch(console.error);
+      }
+    }).catch(console.error);
+  } else {
+    resp.status(500).send('There are no users from or to copy values');
+  }
+  resp.status(200).send();
+});
+
 exports.attachPaymentToCustomer = functions.https.onCall(async (data, context) => {
   if (context.auth && context.auth.uid) {
     const uid = context.auth.uid;
@@ -243,12 +277,12 @@ exports.scheduledFirestoreExport = functions.pubsub.schedule('every 24 hours').o
       // collectionIds: ['users', 'posts']
       collectionIds: []
     })
-      .then(responses => {
+      .then((responses: any) => {
         const response = responses[0];
         console.log(`Operation Name: ${response['name']}`);
         return response;
       })
-      .catch(err => {
+      .catch((err: any) => {
         console.error(err);
         throw new Error('Export operation failed');
       });
