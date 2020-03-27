@@ -1,10 +1,11 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {PaymentService} from '../../../services/payment.service';
-import {IonRadioGroup, ModalController, ToastController} from '@ionic/angular';
+import {IonRadioGroup, LoadingController, ModalController, ToastController} from '@ionic/angular';
 import {ModalPaymentComponent} from '../../../components/modal-payment/modal-payment.component';
 import {Payment} from '../../../models/payment.class';
 import {UsersService} from '../../../services/users.service';
 import {AulaMovilUser} from '../../../models/aula-movil-user.class';
+import {StripeService} from '../../../services/stripe.service';
 
 @Component({
   selector: 'app-payments',
@@ -14,20 +15,25 @@ import {AulaMovilUser} from '../../../models/aula-movil-user.class';
 export class PaymentsPage implements OnInit {
 
   paymentMethods: Payment[];
-  loading = true;
+  loading = false;
   @ViewChild(IonRadioGroup, {static: true}) paymentsRadioGroup: IonRadioGroup;
-
 
   constructor(private paymentService: PaymentService,
               private usersService: UsersService,
               private modalController: ModalController,
-              private toastController: ToastController) {
-    this.paymentService.getPaymentMethods().subscribe(async (paymentMethods: Payment[]) => {
-      this.usersService.get().toPromise().then((document: AulaMovilUser) => {
-        this.loading = false;
-        this.paymentMethods = paymentMethods;
-        this.paymentsRadioGroup.value = document.defaultPaymentId;
-        this.loading = false;
+              private toastController: ToastController,
+              private stripeService: StripeService,
+              private loadingController: LoadingController) {
+    loadingController.create({
+      message: 'Cargando tarjetas...'
+    }).then(async loading => {
+      await loading.present();
+      this.stripeService.findPaymentMethods().subscribe(async (paymentMethods: Payment[]) => {
+        this.usersService.get().toPromise().then((document: AulaMovilUser) => {
+          this.paymentMethods = paymentMethods;
+          this.paymentsRadioGroup.value = document.defaultPaymentId;
+          loading.dismiss();
+        });
       });
     });
   }
@@ -44,15 +50,24 @@ export class PaymentsPage implements OnInit {
         if (data.data) {
           this.loading = true;
           const payment = new Payment(data.data);
-          this.selectPaymentMethod(payment);
-          this.paymentService.save(payment)
-            .then(async () => {
-              this.loading = false;
+          this.stripeService.attachPaymentToCustomer(payment).toPromise().then(async (added: boolean) => {
+            if (added) {
+              this.paymentMethods.unshift(payment);
               this.toastController.create({
                 message: `La tarjeta ${payment.lastFour} ha sido guardada exitosamente`,
                 duration: 3000
+              }).then(toast => {
+                toast.present();
+                this.selectPaymentMethod(payment);
+              });
+            } else {
+              this.toastController.create({
+                message: `Ocurrió un error al agregar la tarjeta ${payment.lastFour}, intentalo mas tarde`,
+                duration: 3000,
+                color: 'danger'
               }).then(toast => toast.present());
-            });
+            }
+          }).catch(console.error);
         }
       });
   }
@@ -62,7 +77,9 @@ export class PaymentsPage implements OnInit {
       return 'https://img.icons8.com/color/48/visa';
     } else if (brand === 'mastercard') {
       return 'https://img.icons8.com/color/48/mastercard';
-    } else {
+    } else if (brand === 'amex') {
+      return 'https://img.icons8.com/color/48/amex';
+    } else  {
       return 'https://img.icons8.com/color/48/bank-card-front-side';
     }
   }
@@ -75,7 +92,7 @@ export class PaymentsPage implements OnInit {
     } else {
       paymentId = payment.detail.value;
     }
-    console.log(paymentId);
+    this.paymentsRadioGroup.value = paymentId;
     this.usersService.setDefaultPayment(paymentId).then(() => this.loading = false);
   }
 

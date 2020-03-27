@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
+  stripeKey: 'pk_test_mWD5lrD4nc5sbxTtWrbmxjUS00Yv57M7uH',
   firebaseConfig: {
     apiKey: 'AIzaSyA_2PcE2jt-rRPLtnef7Z3xRvMNM6la6CM',
     authDomain: 'aula-movil.firebaseapp.com',

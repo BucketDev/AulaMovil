@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Group} from '../../models/group.class';
+import {firestore} from 'firebase/app';
 
 @Component({
   selector: 'app-group-card',
@@ -17,5 +18,7 @@ export class GroupCardComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {}
+
+  getCreationDate = (group: Group) => group.creationDate as firestore.Timestamp;
 
 }

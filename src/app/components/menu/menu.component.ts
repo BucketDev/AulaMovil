@@ -3,6 +3,7 @@ import {AuthService} from '../../services/auth.service';
 import {MenuController, ModalController, NavController} from '@ionic/angular';
 import {ActivatedRoute} from '@angular/router';
 import {AboutComponent} from '../about/about.component';
+import {StripeService} from '../../services/stripe.service';
 
 @Component({
   selector: 'app-menu',
@@ -15,7 +16,8 @@ export class MenuComponent implements OnInit {
               public menuController: MenuController,
               private navController: NavController,
               private activatedRoute: ActivatedRoute,
-              private modalController: ModalController) { }
+              private modalController: ModalController,
+              public stripeService: StripeService) { }
 
   ngOnInit() {}
 

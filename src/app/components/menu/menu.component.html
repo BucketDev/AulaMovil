@@ -15,10 +15,10 @@
         <ion-icon name="card" slot="start"></ion-icon>
         <ion-label>Subscripción</ion-label>
       </ion-item>
-      <ion-item-divider>
+      <ion-item-divider *ngIf="stripeService.hasActiveSubscription">
         <ion-label>Herramientas</ion-label>
       </ion-item-divider>
-      <ion-item button detail (click)="showTransferPage()">
+      <ion-item button detail (click)="showTransferPage()" *ngIf="stripeService.hasActiveSubscription">
         <ion-icon name="share" slot="start"></ion-icon>
         <ion-label>Transferir recursos</ion-label>
       </ion-item>

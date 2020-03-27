@@ -8,7 +8,8 @@
 </ion-header>
 <ion-content>
   <ion-progress-bar type="indeterminate" color="aula-movil" *ngIf="loading"></ion-progress-bar>
-  <ion-list>
+  <app-empty-list emptyText="No se encontraron métodos de pago" *ngIf="paymentMethods?.length === 0"></app-empty-list>
+  <ion-list lines="full">
     <ion-radio-group (ionChange)="selectPaymentMethod($event)">
       <ion-item *ngFor="let paymentMethod of paymentMethods">
         <ion-img [src]="getBrand(paymentMethod.brand)" slot="start"></ion-img>

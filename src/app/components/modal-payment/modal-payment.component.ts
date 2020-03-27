@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {LoadingController, ModalController, ToastController} from '@ionic/angular';
 import {loadStripe, Stripe} from '@stripe/stripe-js';
 import {AuthService} from '../../services/auth.service';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-modal-payment',
@@ -19,7 +20,7 @@ export class ModalPaymentComponent implements OnInit {
               private loadingController: LoadingController) { }
 
   async ngOnInit() {
-    this.stripe = await loadStripe('pk_test_mWD5lrD4nc5sbxTtWrbmxjUS00Yv57M7uH');
+    this.stripe = await loadStripe(environment.stripeKey);
     this.elements = this.stripe.elements({ locale: 'es'} );
     const card = this.elements.create('card', {
       style: {

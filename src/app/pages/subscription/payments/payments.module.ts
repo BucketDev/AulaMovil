@@ -8,6 +8,7 @@ import {PaymentsPageRoutingModule} from './payments-routing.module';
 
 import {PaymentsPage} from './payments.page';
 import {ModalPaymentModule} from '../../../components/modal-payment/modal-payment.module';
+import {SharedModule} from '../../../components/shared/shared.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import {ModalPaymentModule} from '../../../components/modal-payment/modal-paymen
     FormsModule,
     IonicModule,
     PaymentsPageRoutingModule,
-    ModalPaymentModule
+    ModalPaymentModule,
+    SharedModule
   ],
   declarations: [PaymentsPage]
 })
