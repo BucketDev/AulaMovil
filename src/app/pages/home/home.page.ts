@@ -19,17 +19,19 @@ import {Observable, Subscription} from 'rxjs';
 import {DeactivatableComponent} from '../../interfaces/deactivable-component.interface';
 import {StripeService} from '../../services/stripe.service';
 
+const formatCheckedSubscription = 'YYYY-MM-DD';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
+
 export class HomePage implements DeactivatableComponent {
 
   groups: Group[];
   filteredGroups: Group[];
   schoolYear: SchoolYear;
-  subscriptionSub = new Subscription();
   hasActiveSubscription: boolean;
   groupLoading = false;
   loading = true;
@@ -59,18 +61,32 @@ export class HomePage implements DeactivatableComponent {
 
   ionViewWillEnter() {
     this.loading = true;
-    this.stripeService.findSubscriptions().toPromise().then((subscriptions: Subscription[]) => {
-      this.loading = false;
-      const hasActiveSubscription = subscriptions ? subscriptions.length > 0 : false;
-      this.stripeService.hasActiveSubscription = hasActiveSubscription;
-      if (hasActiveSubscription) {
-        this.selectSchoolYear();
-      }
+    this.storageService.get('activeSubscriptionCheck')
+      .then((activeSubscription: {checked: string, subscriptions: Subscription[]}) => {
+        if (activeSubscription === null) {
+          this.stripeService.findSubscriptions().toPromise().then(this.obtainedSubscriptions);
+        } else {
+          if (moment().format(formatCheckedSubscription) === activeSubscription.checked) {
+            this.obtainedSubscriptions(activeSubscription.subscriptions);
+          }
+        }
     });
   }
 
-  ionViewDidLeave() {
-    this.subscriptionSub.unsubscribe();
+  obtainedSubscriptions = (subscriptions: Subscription[]) => {
+    this.loading = false;
+    const hasActiveSubscription = subscriptions ? subscriptions.length > 0 : false;
+    this.stripeService.hasActiveSubscription = hasActiveSubscription;
+    if (hasActiveSubscription) {
+      this.selectSchoolYear();
+      this.storageService.set('activeSubscriptionCheck', {
+        checked: moment().format(formatCheckedSubscription), subscriptions
+      });
+    } else {
+      this.storageService.set('activeSubscriptionCheck', {
+        checked: moment().format(formatCheckedSubscription), subscriptions: null
+      });
+    }
   }
 
   selectSchoolYear = () => {

@@ -10,6 +10,7 @@ import * as moment from 'moment';
 import {Plan} from '../../models/plan.class';
 import {formatCurrency, registerLocaleData} from '@angular/common';
 import localeMx from '@angular/common/locales/es-MX';
+import {StorageService} from '../../services/storage.service';
 registerLocaleData(localeMx, 'mx');
 
 @Component({
@@ -17,6 +18,7 @@ registerLocaleData(localeMx, 'mx');
   templateUrl: './subscription.page.html',
   styleUrls: ['./subscription.page.scss'],
 })
+
 export class SubscriptionPage implements OnInit {
 
   subscriptions: Subscription[];
@@ -28,7 +30,8 @@ export class SubscriptionPage implements OnInit {
               private usersService: UsersService,
               private stripeService: StripeService,
               private loadingController: LoadingController,
-              private alertController: AlertController) {
+              private alertController: AlertController,
+              private storageService: StorageService) {
   }
 
   ngOnInit() {
@@ -77,27 +80,29 @@ export class SubscriptionPage implements OnInit {
                   message: 'Generando subscripción...'
                 }).then(loadingSub => {
                   loadingSub.present();
-                  this.stripeService.createSubscription(plan).toPromise()
-                    .then((subscription) => {
-                      this.toastController.create({
-                        message: `La subscripción a <strong>${product.name}</strong> ha sido generada exitosamente`,
-                        color: 'success',
-                        duration: 3000
-                      }).then(toast => {
-                        toast.present();
-                        this.ngOnInit();
-                      });
-                    })
-                    .catch((error) => {
-                      console.log(error);
-                      this.toastController.create({
-                        message: 'Ocurrió un error al crear la subscripción, inténtalo mas tarde',
-                        duration: 3000,
-                        color: 'danger'
-                      }).then(toast => {
-                        toast.present();
-                      });
-                    }).finally(() => loadingSub.dismiss());
+                  this.stripeService.createSubscription(plan).toPromise().then((subscription) => {
+                    this.toastController.create({
+                      message: `La subscripción a <strong>${product.name}</strong> ha sido generada exitosamente`,
+                      color: 'success',
+                      duration: 3000
+                    }).then(toast => {
+                      toast.present();
+                      this.ngOnInit();
+                    });
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                    this.toastController.create({
+                      message: 'Ocurrió un error al crear la subscripción, inténtalo mas tarde',
+                      duration: 3000,
+                      color: 'danger'
+                    }).then(toast => {
+                      toast.present();
+                    });
+                  }).finally(async() => {
+                    await loadingSub.dismiss();
+                    await this.storageService.remove('activeSubscriptionCheck');
+                  });
                 });
               }
             }]
@@ -213,8 +218,9 @@ export class SubscriptionPage implements OnInit {
     this.toastController.create({
       message: `La subscripción a <strong>${product.name}</strong> ha sido cancelada`,
       duration: 3000
-    }).then(toast => {
-      toast.present();
+    }).then(async toast => {
+      await toast.present();
+      await this.storageService.remove('activeSubscriptionCheck');
       this.ngOnInit();
     });
   }
