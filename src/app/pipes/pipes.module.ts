@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {PendingActivitiesPipe} from './pending-activities.pipe';
 import {UriSanitizerPipe} from './uri-sanitizer.pipe';
 import {SchoolYearPipe} from './school-year.pipe';
+import { PlanIntervalPipe } from './plan-interval.pipe';
 
 @NgModule({
   imports: [
@@ -11,12 +12,14 @@ import {SchoolYearPipe} from './school-year.pipe';
   declarations: [
     SchoolYearPipe,
     PendingActivitiesPipe,
-    UriSanitizerPipe
+    UriSanitizerPipe,
+    PlanIntervalPipe
   ],
   exports: [
     SchoolYearPipe,
     PendingActivitiesPipe,
-    UriSanitizerPipe
+    UriSanitizerPipe,
+    PlanIntervalPipe
   ]
 })
 export class PipesModule { }

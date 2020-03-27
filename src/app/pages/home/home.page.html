@@ -8,8 +8,7 @@
 <app-menu></app-menu>
 <ion-content id="home" class="ion-padding-bottom">
   <ion-progress-bar type="indeterminate" color="aula-movil" *ngIf="loading"></ion-progress-bar>
-  <ion-card class="ion-margin" [ngClass]="{'aula-movil-hide': hasActiveSubscription}">
-    <ion-img src="https://i.pinimg.com/564x/79/c8/3e/79c83e003f469a8c5e83ed9cecc7446b.jpg"></ion-img>
+  <ion-card class="ion-margin" [ngClass]="{'aula-movil-hide': loading || stripeService.hasActiveSubscription}">
     <ion-card-header>
       <ion-card-title>Obten tu subscripción</ion-card-title>
       <ion-card-subtitle>Disfruta de todas las opciones de Aula móvil con una sola subscripción</ion-card-subtitle>
@@ -18,7 +17,7 @@
       <ion-button size="block" color="aula-movil" (click)="showSubscriptionPage()">Subscripción</ion-button>
     </ion-card-content>
   </ion-card>
-  <div [ngClass]="{'aula-movil-hide': !hasActiveSubscription}">
+  <div [ngClass]="{'aula-movil-hide': loading || !stripeService.hasActiveSubscription}">
     <ion-list>
       <ion-list-header mode="ios">Cíclo Escolar</ion-list-header>
       <ion-item (click)="showAddSchoolYear()" button>

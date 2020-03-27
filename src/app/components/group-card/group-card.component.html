@@ -1,6 +1,6 @@
 <ion-card class="ion-margin" (click)="groupSelected.emit(group)" [button]="actions">
   <ion-card-header class="aula-movil-groups-cover" [style.background-image]="group.backgroundCover | uriSanitizer">
-    <ion-card-subtitle color="light">{{group.creationDate.toDate() | date: 'mediumDate'}}</ion-card-subtitle>
+    <ion-card-subtitle color="light">{{getCreationDate(group).toDate() | date: 'mediumDate'}}</ion-card-subtitle>
     <ion-card-title color="light">{{group.name}}</ion-card-title><ion-fab horizontal="end" vertical="center" (click)="$event.stopPropagation()">
     <ion-fab-button color="light" size="small" *ngIf="actions">
       <ion-icon color="aula-movil" name="settings-outline"></ion-icon>

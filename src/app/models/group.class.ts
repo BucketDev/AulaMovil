@@ -7,7 +7,7 @@ export class Group {
   students: number;
   activities: number;
   schoolYear: string;
-  creationDate: Date | firestore.Timestamp;
+  creationDate: firestore.Timestamp | Date;
 
   constructor(name: string, schoolYear: string) {
     this.name = name.toUpperCase();

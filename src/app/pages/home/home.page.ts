@@ -15,10 +15,9 @@ import {StorageService} from '../../services/storage.service';
 import * as moment from 'moment';
 import {Group} from '../../models/group.class';
 import {GroupsService} from '../../services/groups.service';
-import {SubscriptionsService} from '../../services/subscriptions.service';
 import {Observable, Subscription} from 'rxjs';
 import {DeactivatableComponent} from '../../interfaces/deactivable-component.interface';
-import {AngularFireFunctions} from '@angular/fire/functions';
+import {StripeService} from '../../services/stripe.service';
 
 @Component({
   selector: 'app-home',
@@ -31,7 +30,7 @@ export class HomePage implements DeactivatableComponent {
   filteredGroups: Group[];
   schoolYear: SchoolYear;
   subscriptionSub = new Subscription();
-  hasActiveSubscription = true;
+  hasActiveSubscription: boolean;
   groupLoading = false;
   loading = true;
   @ViewChild(IonInput, {static: true}) schoolYearSelect: IonInput;
@@ -45,9 +44,8 @@ export class HomePage implements DeactivatableComponent {
               private actionSheetController: ActionSheetController,
               private navController: NavController,
               private loadingController: LoadingController,
-              public subscriptionsService: SubscriptionsService,
               private modalController: ModalController,
-              private afFunctions: AngularFireFunctions) { }
+              public stripeService: StripeService) { }
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
     return this.modalController.getTop()
@@ -60,12 +58,14 @@ export class HomePage implements DeactivatableComponent {
   }
 
   ionViewWillEnter() {
-    this.subscriptionSub = this.subscriptionsService.getActive().subscribe((subscription) => {
-      this.hasActiveSubscription = !!subscription;
-      if (this.hasActiveSubscription) {
+    this.loading = true;
+    this.stripeService.findSubscriptions().toPromise().then((subscriptions: Subscription[]) => {
+      this.loading = false;
+      const hasActiveSubscription = subscriptions ? subscriptions.length > 0 : false;
+      this.stripeService.hasActiveSubscription = hasActiveSubscription;
+      if (hasActiveSubscription) {
         this.selectSchoolYear();
       }
-      this.loading = false;
     });
   }
 
@@ -267,12 +267,5 @@ export class HomePage implements DeactivatableComponent {
       this.groups = [...this.filteredGroups];
     }
   }
-
-  callFunction = () => {
-    const callable = this.afFunctions.httpsCallable('helloWorld');
-    callable({name: 'Rodrigo Loyola'}).subscribe((response) => {
-      console.log(response.data);
-    });
-}
 
 }
