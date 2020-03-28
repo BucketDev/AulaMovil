@@ -37,7 +37,7 @@ export class SummaryPage {
         top: 20,
         left: 20,
         right: 20,
-        bottom: 120
+        bottom: 170
       }
     },
     plugins: {

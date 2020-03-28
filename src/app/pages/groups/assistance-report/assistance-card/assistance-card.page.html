@@ -4,14 +4,10 @@
       <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
     <ion-title>Reporte de Asistencias</ion-title>
-    <ion-buttons slot="end">
-      <ion-button [routerLink]="['/home']">
-        <ion-icon slot="icon-only" name="home"></ion-icon>
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content>
+  <app-breadcrumbs [breadcrumbType]="0" [group]="groupsService.group" *ngIf="groupsService.group"></app-breadcrumbs>
   <ion-list>
     <ion-list-header lines="none" mode="ios">
       <ion-label>{{student.name}} {{student.lastName}}</ion-label>

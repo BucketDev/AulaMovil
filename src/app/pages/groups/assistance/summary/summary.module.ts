@@ -8,6 +8,7 @@ import {SummaryPageRoutingModule} from './summary-routing.module';
 
 import {SummaryPage} from './summary.page';
 import {ChartsModule} from 'ng2-charts';
+import {BreadcrumbsModule} from '../../../../components/breadcrumbs/breadcrumbs.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import {ChartsModule} from 'ng2-charts';
     FormsModule,
     IonicModule,
     SummaryPageRoutingModule,
-    ChartsModule
+    ChartsModule,
+    BreadcrumbsModule
   ],
   declarations: [SummaryPage]
 })

@@ -7,6 +7,7 @@ import {ActivitiesService} from '../../../../services/activities.service';
 import {PickerController, ToastController} from '@ionic/angular';
 import {Grade} from '../../../../models/grade.class';
 import {Router} from '@angular/router';
+import {GroupsService} from '../../../../services/groups.service';
 
 @Component({
   selector: 'app-report-card',
@@ -24,7 +25,8 @@ export class ReportCardPage {
   constructor(private activitiesService: ActivitiesService,
               private pickerController: PickerController,
               private router: Router,
-              private toastController: ToastController) {
+              private toastController: ToastController,
+              public groupsService: GroupsService) {
     this.reportCardGroup = new FormGroup({});
     if (router.getCurrentNavigation() && router.getCurrentNavigation().extras) {
       this.activities = router.getCurrentNavigation().extras.state.activities;

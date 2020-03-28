@@ -7,6 +7,7 @@ import * as moment from 'moment';
 import {AssistanceCard} from '../../../../models/assistance-card.class';
 import {IonCheckbox, ToastController} from '@ionic/angular';
 import {Subscription} from 'rxjs';
+import {GroupsService} from '../../../../services/groups.service';
 
 @Component({
   selector: 'app-assistance-card',
@@ -27,7 +28,8 @@ export class AssistanceCardPage {
 
   constructor(private router: Router,
               private assistancesService: AssistancesService,
-              private toastController: ToastController) {
+              private toastController: ToastController,
+              public groupsService: GroupsService) {
     if (this.router.getCurrentNavigation() && this.router.getCurrentNavigation().extras) {
       this.student = this.router.getCurrentNavigation().extras.state.student;
       this.initialDate = this.router.getCurrentNavigation().extras.state.initialDate;

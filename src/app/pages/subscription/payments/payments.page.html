@@ -11,12 +11,19 @@
   <app-empty-list emptyText="No se encontraron métodos de pago" *ngIf="paymentMethods?.length === 0"></app-empty-list>
   <ion-list lines="full">
     <ion-radio-group (ionChange)="selectPaymentMethod($event)">
-      <ion-item *ngFor="let paymentMethod of paymentMethods">
-        <ion-img [src]="getBrand(paymentMethod.brand)" slot="start"></ion-img>
-        <ion-label>{{paymentMethod.brand.toUpperCase()}} - {{paymentMethod.lastFour}}</ion-label>
-        <ion-chip>{{paymentMethod.expMonth}}/{{paymentMethod.expYear}}</ion-chip>
-        <ion-radio slot="end" [value]="paymentMethod.id" color="aula-movil"></ion-radio>
-      </ion-item>
+      <ion-item-sliding *ngFor="let paymentMethod of paymentMethods">
+        <ion-item-options side="start">
+          <ion-item-option color="danger">
+            <ion-icon name="trash" slot="icon-only"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+        <ion-item>
+          <ion-img [src]="getBrand(paymentMethod.brand)" slot="start"></ion-img>
+          <ion-label>{{paymentMethod.brand.toUpperCase()}} - {{paymentMethod.lastFour}}</ion-label>
+          <ion-chip>{{paymentMethod.expMonth}}/{{paymentMethod.expYear}}</ion-chip>
+          <ion-radio slot="end" [value]="paymentMethod.id" color="aula-movil"></ion-radio>
+        </ion-item>
+      </ion-item-sliding>
     </ion-radio-group>
   </ion-list>
   <ion-fab horizontal="end" vertical="bottom" slot="fixed">

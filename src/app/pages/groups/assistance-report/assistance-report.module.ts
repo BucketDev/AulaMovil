@@ -6,6 +6,7 @@ import {FormsModule} from '@angular/forms';
 import {SharedModule} from '../../../components/shared/shared.module';
 import {StudentSelectionPage} from './student-selection/student-selection.page';
 import {AssistanceCardPage} from './assistance-card/assistance-card.page';
+import {BreadcrumbsModule} from '../../../components/breadcrumbs/breadcrumbs.module';
 
 @NgModule({
   imports: [
@@ -13,7 +14,8 @@ import {AssistanceCardPage} from './assistance-card/assistance-card.page';
     IonicModule,
     AssistanceReportRoutingModule,
     SharedModule,
-    FormsModule
+    FormsModule,
+    BreadcrumbsModule
   ],
   declarations: [
     StudentSelectionPage,

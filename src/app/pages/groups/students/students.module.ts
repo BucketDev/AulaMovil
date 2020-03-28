@@ -7,6 +7,7 @@ import {IonicModule} from '@ionic/angular';
 import {StudentsPage} from './students.page';
 import {StudentsPageRoutingModule} from './students-routing.module';
 import {SharedModule} from '../../../components/shared/shared.module';
+import {BreadcrumbsModule} from '../../../components/breadcrumbs/breadcrumbs.module';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import {SharedModule} from '../../../components/shared/shared.module';
     FormsModule,
     IonicModule,
     StudentsPageRoutingModule,
-    SharedModule
+    SharedModule,
+    BreadcrumbsModule
   ],
   declarations: [StudentsPage]
 })

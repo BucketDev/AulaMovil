@@ -20,35 +20,36 @@ exports.createUser = functions.auth.user().onCreate((userRecord, context) => {
   }).catch(console.error);
 });
 
-exports.updateStudentsTotal = functions.firestore.document('users/{userUid}/groups/{groupUid}/students/{studentUid}')
-  .onWrite((snapshot, context) => {
-    const studentRef = snapshot.after.ref;
-    const studentCollection = studentRef.parent;
-    if (studentRef.parent.parent) {
-      const groupRef = studentRef.parent.parent;
-      if (groupRef !== undefined) {
-        return studentCollection.listDocuments().then((documents) =>
-          groupRef.update({students: documents.length})
-        ).catch(console.error);
-      }
-    }
-    return null;
-  });
+exports.increaseStudentsTotal = functions.firestore.document('users/{userUid}/groups/{groupUid}/students/{studentUid}')
+  .onCreate((snapshot, context) => updateGroupTotal(snapshot, 'students'));
 
-exports.updateActivitiesTotal = functions.firestore.document('users/{userUid}/groups/{groupUid}/activities/{activityUid}')
-  .onWrite((snapshot, context) => {
-    const activityRef = snapshot.after.ref;
-    const activitiesCollection = activityRef.parent;
-    if (activityRef.parent.parent) {
-      const groupRef = activityRef.parent.parent;
-      if (groupRef !== undefined) {
-        return activitiesCollection.listDocuments().then((documents) =>
-          groupRef.update({activities: documents.length})
-        ).catch(console.error);
+exports.decreaseStudentsTotal = functions.firestore.document('users/{userUid}/groups/{groupUid}/students/{studentUid}')
+  .onDelete((snapshot, context) => updateGroupTotal(snapshot, 'students'));
+
+exports.increaseActivitiesTotal = functions.firestore.document('users/{userUid}/groups/{groupUid}/activities/{activityUid}')
+  .onCreate((snapshot, context) => updateGroupTotal(snapshot, 'activities'));
+
+exports.decreaseActivitiesTotal = functions.firestore.document('users/{userUid}/groups/{groupUid}/activities/{activityUid}')
+  .onDelete((snapshot, context) => updateGroupTotal(snapshot, 'activities'));
+
+const updateGroupTotal = (snapshot: DocumentSnapshot, propertyName: string) => {
+  const documentRef = snapshot.ref;
+  const collection = documentRef.parent;
+  if (documentRef.parent.parent) {
+    const groupRef = documentRef.parent.parent;
+    if (groupRef !== undefined) {
+      switch (propertyName) {
+        case 'students':
+          return collection.listDocuments().then((documents) =>
+            groupRef.update({students: documents.length})).catch(console.error);
+        case 'activities':
+          return collection.listDocuments().then((documents) =>
+            groupRef.update({activities: documents.length})).catch(console.error);
       }
     }
-    return null;
-  });
+  }
+  return null;
+};
 
 exports.updateActivityStatus = functions.firestore.document('users/{userUid}/groups/{groupUid}/activities/{activityUid}')
   .onUpdate((change, context) => {
@@ -56,8 +57,8 @@ exports.updateActivityStatus = functions.firestore.document('users/{userUid}/gro
     const {grades} = change.after.data();
     const activityRef = change.after.ref;
     const groupRef = activityRef.parent.parent;
-    return groupRef?.get()
-      .then((groupSnapshot: DocumentSnapshot) => {
+    if (groupRef !== null) {
+      return groupRef.get().then((groupSnapshot: DocumentSnapshot) => {
         // @ts-ignore
         const {students} = groupSnapshot.data();
         let status = 0;
@@ -71,6 +72,8 @@ exports.updateActivityStatus = functions.firestore.document('users/{userUid}/gro
         }
         return null;
       }).catch(console.error);
+    }
+    return null;
   });
 
 exports.createSubscription = functions.https.onCall((data, context) => {
@@ -139,10 +142,10 @@ exports.copyDataFromUserToUser = functions.https.onRequest((req, resp) => {
 exports.copyDataFromGroupToGroup = functions.https.onRequest((req, resp) => {
   const {from, fromGroup, to, toGroup} = req.body;
   if (from !== undefined && to !== undefined && fromGroup !== undefined && toGroup !== undefined) {
-    console.log(`Copying from user: ${from} group: ${fromGroup} to user: ${to} group ${toGroup}`);
+    // console.log(`Copying from user: ${from} group: ${fromGroup} to user: ${to} group ${toGroup}`);
     const fromRef = admin.firestore().doc(`users/${from}`).collection('groups').doc(fromGroup);
     const toRef = admin.firestore().doc(`users/${to}`).collection('groups').doc(toGroup);
-    return fromRef.get().then(snapshot => {
+    fromRef.get().then(snapshot => {
       const groupData = snapshot.data();
       if (groupData !== undefined) {
         toRef.set(groupData).then(() => {
@@ -161,8 +164,10 @@ exports.copyDataFromGroupToGroup = functions.https.onRequest((req, resp) => {
               await toRef.collection('assistance').doc(assistance.id).set(assistance.data());
             });
           }).catch(console.error);
+          resp.status(200).send(`All data was copied from ${fromGroup} to ${toGroup}`);
         }).catch(console.error);
       }
+      resp.status(404).send('Group not found');
     }).catch(console.error);
   } else {
     resp.status(500).send('There are no users from or to copy values');

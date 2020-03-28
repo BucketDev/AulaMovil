@@ -9,6 +9,7 @@ import {ActivitiesPageRoutingModule} from './activities-routing.module';
 import {ActivitiesPage} from './activities.page';
 import {ActivitiesModule} from '../../../components/activities/activities.module';
 import {SharedModule} from '../../../components/shared/shared.module';
+import {BreadcrumbsModule} from '../../../components/breadcrumbs/breadcrumbs.module';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import {SharedModule} from '../../../components/shared/shared.module';
     IonicModule,
     ActivitiesPageRoutingModule,
     ActivitiesModule,
-    SharedModule
+    SharedModule,
+    BreadcrumbsModule
   ],
   declarations: [ActivitiesPage]
 })

@@ -8,6 +8,7 @@ import {AssistancePageRoutingModule} from './assistance-routing.module';
 
 import {AssistancePage} from './assistance.page';
 import {SharedModule} from '../../../components/shared/shared.module';
+import {BreadcrumbsModule} from '../../../components/breadcrumbs/breadcrumbs.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import {SharedModule} from '../../../components/shared/shared.module';
     FormsModule,
     IonicModule,
     AssistancePageRoutingModule,
-    SharedModule
+    SharedModule,
+    BreadcrumbsModule
   ],
   declarations: [AssistancePage]
 })

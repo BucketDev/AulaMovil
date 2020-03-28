@@ -7,6 +7,7 @@ import {ActivitiesSelectionPage} from './activities-selection/activities-selecti
 import {ActivitiesReportRoutingModule} from './activities-report-routing.module';
 import {StudentSelectionPage} from './student-selection/student-selection.page';
 import {ReportCardPage} from './report-card/report-card.page';
+import {BreadcrumbsModule} from '../../../components/breadcrumbs/breadcrumbs.module';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import {ReportCardPage} from './report-card/report-card.page';
     IonicModule,
     SharedModule,
     ReactiveFormsModule,
-    ActivitiesReportRoutingModule
+    ActivitiesReportRoutingModule,
+    BreadcrumbsModule
   ],
   declarations: [
     ActivitiesSelectionPage,

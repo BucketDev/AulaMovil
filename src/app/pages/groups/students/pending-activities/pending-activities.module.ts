@@ -9,6 +9,7 @@ import {PendingActivitiesPageRoutingModule} from './pending-activities-routing.m
 import {PendingActivitiesPage} from './pending-activities.page';
 import {SharedModule} from '../../../../components/shared/shared.module';
 import {PipesModule} from '../../../../pipes/pipes.module';
+import {BreadcrumbsModule} from '../../../../components/breadcrumbs/breadcrumbs.module';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import {PipesModule} from '../../../../pipes/pipes.module';
     PendingActivitiesPageRoutingModule,
     SharedModule,
     ReactiveFormsModule,
-    PipesModule
+    PipesModule,
+    BreadcrumbsModule
   ],
   declarations: [PendingActivitiesPage]
 })

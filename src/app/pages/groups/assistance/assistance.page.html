@@ -12,6 +12,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
+  <app-breadcrumbs [breadcrumbType]="0" [group]="groupsService.group" *ngIf="groupsService.group"></app-breadcrumbs>
   <ion-list>
     <ion-list-header mode="ios">Fecha de asistencia</ion-list-header>
     <ion-item detail>
