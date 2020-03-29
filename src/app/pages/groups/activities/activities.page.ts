@@ -21,7 +21,7 @@ export class ActivitiesPage implements OnInit, DeactivatableComponent {
   activities: Activity[];
 
   constructor(private activitiesService: ActivitiesService,
-              private groupsService: GroupsService,
+              public groupsService: GroupsService,
               private modalController: ModalController,
               private alertController: AlertController,
               private toastController: ToastController,

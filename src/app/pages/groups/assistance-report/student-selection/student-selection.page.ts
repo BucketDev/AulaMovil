@@ -27,7 +27,7 @@ export class StudentSelectionPage implements OnInit {
   @ViewChild('finalDate', { static: true }) finalIonDatetime: IonDatetime;
 
   constructor(private loadingController: LoadingController,
-              private groupsService: GroupsService,
+              public groupsService: GroupsService,
               private studentsService: StudentsService,
               private activatedRoute: ActivatedRoute,
               private navController: NavController,

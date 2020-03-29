@@ -25,7 +25,7 @@ export class StudentSelectionPage implements OnInit {
   constructor(private studentsService: StudentsService,
               private activitiesService: ActivitiesService,
               private filesService: FilesService,
-              private groupsService: GroupsService,
+              public groupsService: GroupsService,
               private activatedRoute: ActivatedRoute,
               private router: Router,
               private loadingController: LoadingController,

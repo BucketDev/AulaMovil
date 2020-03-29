@@ -266,6 +266,14 @@ exports.cancelSubscriptionAtPeriodEnd = functions.https.onCall((data, context) =
   return null;
 });
 
+exports.detachPaymentMethod = functions.https.onCall((data, context) => {
+  if (context.auth && context.auth.uid) {
+    const payment: string = data.payment.id;
+    return stripe.paymentMethods.detach(payment);
+  }
+  return null;
+});
+
 const bucket = 'gs://aula-movil-backups';
 
 exports.scheduledFirestoreExport = functions.pubsub.schedule('every 24 hours').onRun((context) => {

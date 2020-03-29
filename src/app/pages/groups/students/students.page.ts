@@ -16,7 +16,7 @@ export class StudentsPage implements OnInit {
   students: Student[];
 
   constructor(private studentsService: StudentsService,
-              private groupsService: GroupsService,
+              public groupsService: GroupsService,
               private activatedRoute: ActivatedRoute,
               private alertController: AlertController,
               private toastController: ToastController,

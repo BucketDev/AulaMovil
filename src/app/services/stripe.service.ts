@@ -36,4 +36,7 @@ export class StripeService {
   cancelSubscriptionAtPeriodEnd = (subscription: Subscription) =>
     this.afFunctions.httpsCallable('cancelSubscriptionAtPeriodEnd')({subscription})
 
+  detachPaymentMethod = (payment: Payment) =>
+    this.afFunctions.httpsCallable('detachPaymentMethod')({payment})
+
 }

@@ -29,7 +29,7 @@ export class ActivitiesSelectionPage implements OnInit {
   activityCheckBoxSub = new Subscription();
 
   constructor(private activitiesService: ActivitiesService,
-              private groupsService: GroupsService,
+              public groupsService: GroupsService,
               private navController: NavController,
               private loadingController: LoadingController,
               private activatedRoute: ActivatedRoute,

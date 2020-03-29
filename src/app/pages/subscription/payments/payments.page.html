@@ -13,7 +13,7 @@
     <ion-radio-group (ionChange)="selectPaymentMethod($event)">
       <ion-item-sliding *ngFor="let paymentMethod of paymentMethods">
         <ion-item-options side="start">
-          <ion-item-option color="danger">
+          <ion-item-option color="danger" (click)="showDeletePaymentMethod(paymentMethod)">
             <ion-icon name="trash" slot="icon-only"></ion-icon>
           </ion-item-option>
         </ion-item-options>

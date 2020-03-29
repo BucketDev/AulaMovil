@@ -28,7 +28,7 @@ export class AssistancePage implements OnInit {
     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
   constructor(private studentsService: StudentsService,
-              private groupsService: GroupsService,
+              public groupsService: GroupsService,
               private assistanceService: AssistancesService,
               private toastController: ToastController,
               private activatedRoute: ActivatedRoute,

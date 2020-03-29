@@ -54,7 +54,7 @@ export class SummaryPage {
 
   constructor(private assistancesService: AssistancesService,
               private toastController: ToastController,
-              private groupsService: GroupsService) {
+              public groupsService: GroupsService) {
   }
 
   ionViewDidEnter() {

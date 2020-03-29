@@ -49,7 +49,13 @@ export class SubscriptionPage implements OnInit {
     });
   }
 
-  showPaymentsPage = () => this.navController.navigateForward(['payments'], { relativeTo: this.activatedRoute });
+  showPaymentsPage = () => this.navController.navigateForward(['payments'],
+    {
+      relativeTo: this.activatedRoute,
+      state: {
+        hasSubscription: this.subscriptions.some(subscription => subscription.status === 'active')
+      }
+    })
 
   createSubscription = async (plan: Plan, product: Product) => {
     this.loadingController.create({
