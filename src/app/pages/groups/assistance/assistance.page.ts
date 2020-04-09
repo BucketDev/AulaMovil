@@ -17,7 +17,8 @@ import {ActivatedRoute} from '@angular/router';
 })
 export class AssistancePage implements OnInit {
 
-  loading = false;
+  loading = true;
+  loadingGroup = true;
   students: Student[];
   selectedStudents: Student[] = [];
   assistance: Assistance;
@@ -42,6 +43,7 @@ export class AssistancePage implements OnInit {
           this.groupsService.group = group;
           this.assistanceDate = moment().toDate();
           loadingPop.dismiss();
+          this.loadingGroup = false;
         });
       });
   }

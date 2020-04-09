@@ -12,7 +12,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <app-breadcrumbs [breadcrumbType]="0" [group]="groupsService.group" *ngIf="groupsService.group"></app-breadcrumbs>
+  <app-breadcrumbs [breadcrumbType]="0" [loading]="loadingGroup"></app-breadcrumbs>
   <ion-list>
     <ion-list-header mode="ios">Filtros de actividades</ion-list-header>
     <ion-item detail>

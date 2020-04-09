@@ -23,6 +23,7 @@ export class StudentSelectionPage implements OnInit {
   initialDate: Date;
   finalDate: Date;
   loading = true;
+  loadingGroup = true;
   students: Student[];
   @ViewChild('finalDate', { static: true }) finalIonDatetime: IonDatetime;
 
@@ -41,6 +42,7 @@ export class StudentSelectionPage implements OnInit {
     this.groupsService.findByUid(this.activatedRoute.snapshot.params.groupUid).toPromise().then(group => {
       this.groupsService.group = group;
       loadingPop.dismiss();
+      this.loadingGroup = false;
       this.studentsService.findAllByGroupUid()
         .subscribe(students => {
           this.studentsService.students = students;

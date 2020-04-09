@@ -60,32 +60,38 @@ export class HomePage implements DeactivatableComponent {
   }
 
   ionViewWillEnter() {
-    this.loading = true;
-    this.storageService.get('activeSubscriptionCheck')
-      .then((activeSubscription: {checked: string, subscriptions: Subscription[]}) => {
-        if (activeSubscription === null) {
-          this.stripeService.findSubscriptions().toPromise().then(this.obtainedSubscriptions);
-        } else {
-          if (moment().format(formatCheckedSubscription) === activeSubscription.checked) {
-            this.obtainedSubscriptions(activeSubscription.subscriptions);
-          } else {
+    this.loadingController.create({
+      message: 'Validando membresía...'
+    }).then(loading => {
+      this.storageService.get('activeSubscriptionCheck')
+        .then(async (activeSubscription: {checked: string, subscriptions: Subscription[]}) => {
+          if (activeSubscription === null) {
+            await loading.present();
             this.stripeService.findSubscriptions().toPromise().then(this.obtainedSubscriptions);
+          } else {
+            if (moment().format(formatCheckedSubscription) === activeSubscription.checked) {
+              this.obtainedSubscriptions(activeSubscription.subscriptions);
+            } else {
+              await loading.present();
+              this.stripeService.findSubscriptions().toPromise().then(this.obtainedSubscriptions);
+            }
           }
-        }
+        });
     });
   }
 
-  obtainedSubscriptions = (subscriptions: Subscription[]) => {
+  obtainedSubscriptions = async (subscriptions: Subscription[]) => {
+    await this.loadingController.dismiss();
     this.loading = false;
     const hasActiveSubscription = subscriptions ? subscriptions.length > 0 : false;
     this.stripeService.hasActiveSubscription = hasActiveSubscription;
     if (hasActiveSubscription) {
       this.selectSchoolYear();
-      this.storageService.set('activeSubscriptionCheck', {
+      await this.storageService.set('activeSubscriptionCheck', {
         checked: moment().format(formatCheckedSubscription), subscriptions
       });
     } else {
-      this.storageService.set('activeSubscriptionCheck', {
+      await this.storageService.set('activeSubscriptionCheck', {
         checked: moment().format(formatCheckedSubscription), subscriptions: null
       });
     }

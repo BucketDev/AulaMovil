@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {BreadcrumbType} from '../../models/breadcrumb-type.enum';
 import {Student} from '../../models/student.class';
 import {Group} from '../../models/group.class';
+import {GroupsService} from '../../services/groups.service';
 
 @Component({
   selector: 'app-breadcrumbs',
@@ -12,16 +13,16 @@ export class BreadcrumbsComponent implements OnInit {
 
   @Input() breadcrumbType: BreadcrumbType;
   @Input() student: Student;
-  @Input() group: Group;
+  @Input() loading = false;
 
-  constructor() { }
+  constructor(private groupsService: GroupsService) { }
 
   ngOnInit() {}
 
   getLabel = () => {
     switch (this.breadcrumbType) {
       case BreadcrumbType.GROUP:
-        return this.group.name;
+        return this.groupsService.group.name;
       case BreadcrumbType.STUDENT:
         return `${this.student.displayName} ${this.student.displayLastName}`;
     }

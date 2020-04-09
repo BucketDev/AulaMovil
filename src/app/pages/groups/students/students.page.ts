@@ -13,6 +13,7 @@ import {ActivatedRoute} from '@angular/router';
 export class StudentsPage implements OnInit {
 
   loading = true;
+  loadingGroup = true;
   students: Student[];
 
   constructor(private studentsService: StudentsService,
@@ -29,6 +30,7 @@ export class StudentsPage implements OnInit {
     this.groupsService.findByUid(this.activatedRoute.snapshot.params.groupUid).toPromise().then(group => {
       this.groupsService.group = group;
       loadingPop.dismiss();
+      this.loadingGroup = false;
       this.studentsService.findAllByGroupUid()
         .subscribe(students => {
           this.studentsService.students = students;

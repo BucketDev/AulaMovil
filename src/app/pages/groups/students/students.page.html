@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <app-breadcrumbs [breadcrumbType]="0" [group]="groupsService.group" *ngIf="groupsService.group"></app-breadcrumbs>
+  <app-breadcrumbs [breadcrumbType]="0" [loading]="loadingGroup"></app-breadcrumbs>
   <ion-searchbar placeholder="Busca alumnos" class="ion-padding"
                  cancelButtonIcon (ionChange)="filterStudents($event)"></ion-searchbar>
   <ion-progress-bar type="indeterminate" color="aula-movil" *ngIf="loading"></ion-progress-bar>

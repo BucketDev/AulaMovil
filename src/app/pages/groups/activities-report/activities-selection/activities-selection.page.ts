@@ -1,5 +1,5 @@
 import {Component, EventEmitter, OnInit, Output, QueryList, ViewChild, ViewChildren} from '@angular/core';
-import {IonCheckbox, IonDatetime, LoadingController, NavController, ToastController} from '@ionic/angular';
+import {IonCheckbox, IonDatetime, IonToggle, LoadingController, NavController, ToastController} from '@ionic/angular';
 import {Subscription} from 'rxjs';
 import {Activity} from '../../../../models/activity.class';
 import {ActivitiesService} from '../../../../services/activities.service';
@@ -22,11 +22,12 @@ export class ActivitiesSelectionPage implements OnInit {
   filteredActivities: Activity[] = [];
   selectedActivities: Activity[] = [];
   loading = false;
+  loadingGroup = true;
   @ViewChild('finalDate', { static: true }) finalIonDatetime: IonDatetime;
   @ViewChild('noDueDateCheckbox', { static: true }) noDueDateCheckbox: IonCheckbox;
   @ViewChildren(IonCheckbox) activitiesCheckbox: QueryList<IonCheckbox>;
   @Output() selectedActivitiesEvent = new EventEmitter<Activity[]>();
-  activityCheckBoxSub = new Subscription();
+  @ViewChild(IonToggle, { static: false }) selectAllToggle: IonToggle;
 
   constructor(private activitiesService: ActivitiesService,
               public groupsService: GroupsService,
@@ -41,15 +42,12 @@ export class ActivitiesSelectionPage implements OnInit {
     this.groupsService.findByUid(this.activatedRoute.snapshot.params.groupUid).toPromise().then(group => {
       this.groupsService.group = group;
       loadingPop.dismiss();
+      this.loadingGroup = false;
     });
   }
 
   ionViewWillEnter() {
-    this.activityCheckBoxSub = this.activitiesCheckbox.changes.subscribe(this.updateSelectedCheckBox);
-  }
-
-  ionViewWillLeave() {
-    this.activityCheckBoxSub.unsubscribe();
+    this.updateSelectedCheckBox();
   }
 
   updateSelectedCheckBox = () => this.activitiesCheckbox.forEach((checkBox: IonCheckbox) => {
@@ -113,6 +111,7 @@ export class ActivitiesSelectionPage implements OnInit {
   updateSelectedActivities = () => {
     this.selectedActivities = this.selectedActivities
       .filter(selectedActivity => this.activities.find(activity => activity.uid === selectedActivity.uid));
+    this.updateSelectedCheckBox();
     this.selectedActivitiesEvent.emit(this.selectedActivities);
   }
 
@@ -123,6 +122,11 @@ export class ActivitiesSelectionPage implements OnInit {
       }
     } else {
       this.selectedActivities = this.selectedActivities.filter(storedActivity => storedActivity.uid !== activity.uid);
+    }
+    if (this.activities.length === this.selectedActivities.length) {
+      this.selectAllToggle.checked = true;
+    } else if (this.selectedActivities.length === 0) {
+      this.selectAllToggle.checked = false;
     }
     this.selectedActivitiesEvent.emit(this.selectedActivities);
   }

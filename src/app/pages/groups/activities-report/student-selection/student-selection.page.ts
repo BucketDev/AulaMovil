@@ -36,18 +36,15 @@ export class StudentSelectionPage implements OnInit {
   }
 
   async ngOnInit() {
-    const loadingPop = await this.loadingController.create({ message: 'Cargando...' });
+    const loadingPop = await this.loadingController.create({ message: 'Buscando alumnos...' });
     await loadingPop.present();
-    this.groupsService.findByUid(this.activatedRoute.snapshot.params.groupUid).toPromise().then(group => {
-      this.groupsService.group = group;
-      loadingPop.dismiss();
-      this.studentsService.findAllByGroupUid()
-        .subscribe(students => {
-          this.studentsService.students = students;
-          this.students = students;
-          this.loading = false;
-        });
-    });
+    this.studentsService.findAllByGroupUid()
+      .subscribe(students => {
+        this.studentsService.students = students;
+        this.students = students;
+        loadingPop.dismiss();
+        this.loading = false;
+      });
   }
 
   filterStudents = (event: CustomEvent) => {

@@ -17,6 +17,7 @@ import {ActivatedRoute} from '@angular/router';
 export class ActivitiesPage implements OnInit, DeactivatableComponent {
 
   loading = true;
+  loadingGroup = true;
   disableReorder = true;
   activities: Activity[];
 
@@ -34,6 +35,7 @@ export class ActivitiesPage implements OnInit, DeactivatableComponent {
     this.groupsService.findByUid(this.activatedRoute.snapshot.params.groupUid).toPromise().then(group => {
       this.groupsService.group = group;
       loadingPop.dismiss();
+      this.loadingGroup = false;
       this.activitiesService.findAllByGroupUid().subscribe(activities => {
         this.activities = activities;
         this.activitiesService.activities = activities;

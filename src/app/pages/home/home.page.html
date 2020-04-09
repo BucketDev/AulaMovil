@@ -7,7 +7,6 @@
 </ion-header>
 <app-menu></app-menu>
 <ion-content id="home" class="ion-padding-bottom">
-  <ion-progress-bar type="indeterminate" color="aula-movil" *ngIf="loading"></ion-progress-bar>
   <ion-card class="ion-margin" [ngClass]="{'aula-movil-hide': loading || stripeService.hasActiveSubscription}">
     <ion-card-header>
       <ion-card-title>Obten tu subscripción</ion-card-title>
